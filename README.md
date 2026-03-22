@@ -96,6 +96,63 @@ config_databricks.yaml
   - String trimming
   - JSON serialization (skills)
 
+-Write SQL queries to answer: 
+    - a. How many jobs are currently open? 
+        **Query**:
+        `sqlite> SELECT COUNT(*) FROM bronze_jobs WHERE status = 'Open';`
+
+        ***Result*** ->
+        ╭──────────╮
+        │ COUNT(*) │
+        ╞══════════╡
+        │      178 │
+        ╰──────────╯
+    - b. Top 5 departments by number of applications. 
+        **Query**:
+        ```sql
+        SELECT j.department as department FROM bronze_jobs j JOIN bronze_applications a ON j.job_id = a.job_id           
+        GROUP BY j.department
+        ORDER BY 1 DESC
+        LIMIT 5; 
+        ```
+        
+        ***Result*** ->
+        ╭────────────╮
+        │ department │
+        ╞════════════╡
+        │ Sales      │
+        │ Product    │
+        │ Marketing  │
+        │ HR         │
+        │ Finance    │
+        ╰────────────╯
+    - c. List candidates who applied to more than 3 jobs. 
+        **Query**:
+        SELECT 
+            c.candidate_id,
+            c.first_name,
+            c.last_name,
+            COUNT(a.application_id) AS total_count
+        FROM bronze_candidates c
+        JOIN bronze_applications a
+            ON c.candidate_id = a.candidate_id
+        GROUP BY c.candidate_id, c.first_name, c.last_name
+        HAVING COUNT(a.application_id) > 3; 
+
+        ***Result*** ->
+        ╭──────────────────────────────────────┬─────────────┬─────────────┬─────────────╮
+        │             candidate_id             │ first_name  │  last_name  │ total_count │
+        ╞══════════════════════════════════════╪═════════════╪═════════════╪═════════════╡
+        │ 0002572a-1130-48f5-9d5d-8f6533611134 │ Brian       │ Hines       │           4 │
+        │ 017cc74e-6f18-4343-bf41-5c985a8e8f05 │ Sara        │ Lee         │           4 │
+        │ 01e7cde7-33a2-4a5f-8683-4cc5757e2b43 │ Mary        │ Lambert     │           4 │
+        │ 01f268f5-6553-45aa-bdbc-34f8c8ddd9bb │ Cindy       │ Mcintosh    │           5 │
+        │ 0240f59a-a638-4854-bb2b-8b80c08bd674 │ Gregory     │ Armstrong   │           7 │
+        │ 02b622e9-808e-48d2-9d26-4b1b6593b659 │ Joseph      │ Guerra      │           4 │
+        │ . ....                               │ ...         │ ...         │           . │
+        │ feeef3e1-f771-4700-b305-cd23cfd0b040 │ George      │ Sullivan    │           6 │
+        │ ffb88ef4-80dc-4873-9eb3-18ad9c15b25e │ Matthew     │ Patterson   │           7 │
+        ╰──────────────────────────────────────┴─────────────┴─────────────┴─────────────╯
 ---
 
 ## Task 2: Data Modeling (PySpark)
@@ -126,7 +183,36 @@ config_databricks.yaml
 ---
 
 ### Time-to-Hire Metric
-time_to_hire_days = hired_date - apply_date
+Calculate "Time to Hire" (days from Apply to Hired) per job and department. 
+> time_to_hire_days = hired_date - apply_date
+**Query**
+`agg_job = final_df.groupBy('job_id').agg(F.avg('time_to_hire_days').alias('avg_time_to_hire_days'))`
+_______________________________________
+| job_id      | avg_time_to_hire_days |
+| ----------- | --------------------- |
+| 2e9522d6... | 34.33                 |
+| 2067bdac... | 23.67                 |
+| fd7fe973... | 21.00                 |
+| 697c3923... | 37.50                 |
+| 8cf6e8b8... | 31.57                 |
+| 4b8e63d4... | 26.50                 |
+| 5ffa46ef... | 35.00                 |
+| da7b9095... | 25.00                 |
+| b2cf952d... | 23.00                 |
+| 89d7fd6c... | 30.00                 |
+
+`agg_dept = final_df.groupBy('department').agg(F.avg('time_to_hire_days').alias('avg_time_to_hire_days'))`
+______________________________________
+| department  | avg_time_to_hire_days |
+| ----------- | --------------------- |
+| Sales       | 31.18                 |
+| Engineering | 30.94                 |
+| Marketing   | 29.83                 |
+| Finance     | 29.82                 |
+| HR          | 30.84                 |
+| Product     | 30.17                 |
+| NULL        | 30.72                 |
+
 
 
 Outputs:
@@ -215,7 +301,7 @@ To scale this pipeline:
 
 Benefits:
 - No hardcoding
-- Easy environment switching
+- Easy environment switching where applicable
 
 ---
 
