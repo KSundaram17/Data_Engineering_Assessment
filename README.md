@@ -13,18 +13,17 @@ The solution is divided into three layers:
 ---
 
 ## Architecture
-Raw Files (CSV / JSON / JSONL)
-↓
-SQLite (Landing Layer - raw.db)
-↓
-Exported Bronze CSVs
-↓
-Databricks (Delta Lake)
-↓
-Dim / Fact Tables
-↓
-Metrics + Data Quality Outputs
+```mermaid
+flowchart TD
+    A[Raw Files<br/>CSV / JSON / JSONL]
+    B[SQLite<br/>Landing Layer - raw.db]
+    C[Exported Bronze CSVs]
+    D[Databricks<br/>Delta Lake]
+    E[Dim / Fact Tables]
+    F[Metrics + Data Quality Outputs]
 
+    A --> B --> C --> D --> E --> F
+```
 
 ---
 
@@ -96,17 +95,19 @@ config_databricks.yaml
   - String trimming
   - JSON serialization (skills)
 
--Write SQL queries to answer: 
+- Write SQL queries to answer: 
     - a. How many jobs are currently open? 
+
         **Query**:
-        `sqlite> SELECT COUNT(*) FROM bronze_jobs WHERE status = 'Open';`
+        ```sql
+        sqlite> SELECT COUNT(*) FROM bronze_jobs WHERE status = 'Open';
+        ```
 
         ***Result*** ->
-        ╭──────────╮
-        │ COUNT(*) │
-        ╞══════════╡
-        │      178 │
-        ╰──────────╯
+        | COUNT(*) |
+        |----------|
+        | 178      |
+
     - b. Top 5 departments by number of applications. 
         **Query**:
         ```sql
@@ -117,15 +118,14 @@ config_databricks.yaml
         ```
         
         ***Result*** ->
-        ╭────────────╮
-        │ department │
-        ╞════════════╡
-        │ Sales      │
-        │ Product    │
-        │ Marketing  │
-        │ HR         │
-        │ Finance    │
-        ╰────────────╯
+        | department |
+        |------------|
+        | Sales      |
+        | Product    |
+        | Marketing  |
+        | HR         |
+        | Finance    |
+
     - c. List candidates who applied to more than 3 jobs. 
         **Query**:
         SELECT 
@@ -140,19 +140,18 @@ config_databricks.yaml
         HAVING COUNT(a.application_id) > 3; 
 
         ***Result*** ->
-        ╭──────────────────────────────────────┬─────────────┬─────────────┬─────────────╮
-        │             candidate_id             │ first_name  │  last_name  │ total_count │
-        ╞══════════════════════════════════════╪═════════════╪═════════════╪═════════════╡
-        │ 0002572a-1130-48f5-9d5d-8f6533611134 │ Brian       │ Hines       │           4 │
-        │ 017cc74e-6f18-4343-bf41-5c985a8e8f05 │ Sara        │ Lee         │           4 │
-        │ 01e7cde7-33a2-4a5f-8683-4cc5757e2b43 │ Mary        │ Lambert     │           4 │
-        │ 01f268f5-6553-45aa-bdbc-34f8c8ddd9bb │ Cindy       │ Mcintosh    │           5 │
-        │ 0240f59a-a638-4854-bb2b-8b80c08bd674 │ Gregory     │ Armstrong   │           7 │
-        │ 02b622e9-808e-48d2-9d26-4b1b6593b659 │ Joseph      │ Guerra      │           4 │
-        │ . ....                               │ ...         │ ...         │           . │
-        │ feeef3e1-f771-4700-b305-cd23cfd0b040 │ George      │ Sullivan    │           6 │
-        │ ffb88ef4-80dc-4873-9eb3-18ad9c15b25e │ Matthew     │ Patterson   │           7 │
-        ╰──────────────────────────────────────┴─────────────┴─────────────┴─────────────╯
+        | candidate_id                           | first_name | last_name  | total_count |
+        |----------------------------------------|------------|------------|-------------|
+        | 0002572a-1130-48f5-9d5d-8f6533611134   | Brian      | Hines      | 4           |
+        | 017cc74e-6f18-4343-bf41-5c985a8e8f05   | Sara       | Lee        | 4           |
+        | 01e7cde7-33a2-4a5f-8683-4cc5757e2b43   | Mary       | Lambert    | 4           |
+        | 01f268f5-6553-45aa-bdbc-34f8c8ddd9bb   | Cindy      | Mcintosh   | 5           |
+        | 0240f59a-a638-4854-bb2b-8b80c08bd674   | Gregory    | Armstrong  | 7           |
+        | 02b622e9-808e-48d2-9d26-4b1b6593b659   | Joseph     | Guerra     | 4           |
+        | ...                                    | ...        | ...        | ...         |
+        | feeef3e1-f771-4700-b305-cd23cfd0b040   | George     | Sullivan   | 6           |
+        | ffb88ef4-80dc-4873-9eb3-18ad9c15b25e   | Matthew    | Patterson  | 7           |
+
 ---
 
 ## Task 2: Data Modeling (PySpark)
@@ -187,7 +186,7 @@ Calculate "Time to Hire" (days from Apply to Hired) per job and department.
 > time_to_hire_days = hired_date - apply_date
 **Query**
 `agg_job = final_df.groupBy('job_id').agg(F.avg('time_to_hire_days').alias('avg_time_to_hire_days'))`
-_______________________________________
+
 | job_id      | avg_time_to_hire_days |
 | ----------- | --------------------- |
 | 2e9522d6... | 34.33                 |
@@ -202,7 +201,7 @@ _______________________________________
 | 89d7fd6c... | 30.00                 |
 
 `agg_dept = final_df.groupBy('department').agg(F.avg('time_to_hire_days').alias('avg_time_to_hire_days'))`
-______________________________________
+
 | department  | avg_time_to_hire_days |
 | ----------- | --------------------- |
 | Sales       | 31.18                 |
