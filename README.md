@@ -57,6 +57,7 @@ flowchart TD
 ---
 
 ## Project Structure
+```
 src/
 ingest.py
 export_bronze.py
@@ -72,7 +73,7 @@ config.py
 config/
 config_local.yaml
 config_databricks.yaml
-
+```
 ---
 
 ## Task 1: Data Ingestion
