@@ -3,11 +3,19 @@ import csv
 from datetime import datetime,timezone
 import json
 import hashlib
+from config import load_config
+
 
 class Ingestion:
     def __init__(self, source):
         self.source = source
-    
+        self.config = load_config()
+        jobs_path = self.config["input_dataset_jobs"]
+        applications_path = self.config["input_dataset_applications"]
+        candidates_path = self.config["input_dataset_candidates"]
+        education_path = self.config["input_dataset_education"]
+        workflow_path = self.config["input_dataset_workflow"]
+
     def get_connection(self):
        conn = sqlite3.connect("output/bronze.db")
        cursor = conn.cursor()

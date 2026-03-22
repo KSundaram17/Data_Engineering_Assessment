@@ -1,0 +1,15 @@
+input_jobs: "datasets/jobs.csv"
+input_candidates: "datasets/candidates.json"
+input_workflow_events: "datasets/workflow_events.jsonl"
+input_education: "datasets/education.csv"
+input_applications: "datasets/applications.csv"
+
+bronze_db_path: "output/bronze.db"
+exported_dir_path: "exported_bronze"
+
+bronze_tables:
+  - bronze_jobs
+  - bronze_candidates
+  - bronze_education
+  - bronze_applications
+  - bronze_workflow_events

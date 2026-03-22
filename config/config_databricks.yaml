@@ -1,0 +1,22 @@
+bronze_jobs_export: "/Workspace/Repos/mailsundaramkumari@gmail.com/Data_Engineering_Assessment/exported_bronze/bronze_jobs.csv"
+bronze_candidates_export: "/Workspace/Repos/mailsundaramkumari@gmail.com/Data_Engineering_Assessment/exported_bronze/bronze_candidates.csv"
+bronze_educations_export: "/Workspace/Repos/mailsundaramkumari@gmail.com/Data_Engineering_Assessment/exported_bronze/bronze_education.csv"
+bronze_applications_export: "/Workspace/Repos/mailsundaramkumari@gmail.com/Data_Engineering_Assessment/exported_bronze/bronze_applications.csv"
+
+bronze_jobs_table: "bronze_jobs"
+bronze_candidates_table: "bronze_candidates"
+bronze_education_table: "bronze_education"
+bronze_applications_table: "bronze_applications"
+bronze_workflow_events_table: "bronze_workflow_events"
+
+dim_job_table: "dim_job"
+dim_candidate_table: "dim_candidate"
+fct_workflow_events_table: "fct_workflow_events"
+fct_applications: "fct_applications"
+
+time_to_hire_detail_table: "fct_time_to_hire_detail"
+job_time_to_hire_table: "job_time_to_hire"
+department_time_to_hire_table: "department_time_to_hire"
+
+dq_results_table: "dq_results"
+dq_hired_before_applied_table: "dq_hired_before_applied"
