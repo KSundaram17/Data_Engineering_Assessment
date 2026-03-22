@@ -280,3 +280,6 @@ End-to-end data engineering workflow
 Strong data modeling practices
 Robust data quality handling
 Scalable architecture design
+
+### Future Works
+Given time , I would have added integrated VSCode with Databricks and used databricks asset bundles (Bundles) for smooth continuous deployment pipeline. I could have also combined all the dimension and fact code at one place in transform.py and run them from there instead of separating them out. That would make the pipeline more modular.
