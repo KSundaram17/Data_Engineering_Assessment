@@ -4,7 +4,7 @@ input_workflow_events: "datasets/workflow_events.jsonl"
 input_education: "datasets/education.csv"
 input_applications: "datasets/applications.csv"
 
-bronze_db_path: "output/bronze.db"
+raw_db_path: "output/raw.db"
 exported_dir_path: "exported_bronze"
 
 bronze_tables:

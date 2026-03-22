@@ -1,5 +1,3 @@
-pip install pyyaml
-
 import yaml
 
 def load_config(path="config_local.yaml"):
