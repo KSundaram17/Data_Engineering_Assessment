@@ -128,6 +128,7 @@ config_databricks.yaml
 
     - c. List candidates who applied to more than 3 jobs. 
         **Query**:
+        ```sql
         SELECT 
             c.candidate_id,
             c.first_name,
@@ -138,6 +139,7 @@ config_databricks.yaml
             ON c.candidate_id = a.candidate_id
         GROUP BY c.candidate_id, c.first_name, c.last_name
         HAVING COUNT(a.application_id) > 3; 
+        ```
 
         ***Result*** ->
         | candidate_id                           | first_name | last_name  | total_count |
@@ -184,6 +186,7 @@ config_databricks.yaml
 ### Time-to-Hire Metric
 Calculate "Time to Hire" (days from Apply to Hired) per job and department. 
 > time_to_hire_days = hired_date - apply_date
+
 **Query**
 `agg_job = final_df.groupBy('job_id').agg(F.avg('time_to_hire_days').alias('avg_time_to_hire_days'))`
 
@@ -330,9 +333,12 @@ All implementation decisions and validations were reviewed and verified.
 
 ```bash
 python src/ingest.py
+```
 
 ### Step 2: Export Bronze
+```bash
 python src/export_bronze.py
+```
 
 ### Step 3: Run Databricks Notebooks
 
