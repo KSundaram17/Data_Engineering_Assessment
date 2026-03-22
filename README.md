@@ -110,6 +110,7 @@ config_databricks.yaml
         | 178      |
 
     - b. Top 5 departments by number of applications. 
+        
         **Query**:
         ```sql
         SELECT j.department as department FROM bronze_jobs j JOIN bronze_applications a ON j.job_id = a.job_id           
@@ -128,6 +129,7 @@ config_databricks.yaml
         | Finance    |
 
     - c. List candidates who applied to more than 3 jobs. 
+        
         **Query**:
         ```sql
         SELECT 
@@ -299,7 +301,7 @@ To scale this pipeline:
 
 ## Configuration Management
 
-- Local config: `config.yaml`
+- Local config: `config_local.yaml`
 - Databricks config: `config_databricks.yaml`
 
 Benefits:
@@ -321,7 +323,7 @@ Benefits:
 
 AI assistance was used for:
 - Structuring code
-- Debugging errors in logic
+- Debugging errors in the code
 - Improving design patterns
 
 All implementation decisions and validations were reviewed and verified.
