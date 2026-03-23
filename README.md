@@ -325,6 +325,7 @@ AI assistance was used for:
 - Structuring code
 - Debugging errors in the code
 - Improving design patterns
+- Documentation
 
 All implementation decisions and validations were reviewed and verified.
 
