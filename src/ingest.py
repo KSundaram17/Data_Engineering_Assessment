@@ -4,7 +4,7 @@ import json
 import sqlite3
 from datetime import datetime, timezone
 
-from config import load_config
+from src.config import load_config
 
 
 class Ingestion:

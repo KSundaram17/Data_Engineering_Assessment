@@ -367,6 +367,9 @@ Execute in order:
 8. dq_results
 9. dq_hired_before_applied
 
+### Unit tests 
+Unit test cases were added for key ingestion and transformation logic, including date normalization, deterministic workflow event key generation, time-to-hire calculation, and anomaly detection for hired-before-applied cases.
+
 ### Conclusion
 
 This pipeline demonstrates:
